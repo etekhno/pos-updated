@@ -576,10 +576,14 @@ function calculateRowProductData(quantity) {
     if (tax_method[rowindex] == 1) {
 
         var net_unit_cost = row_product_cost;
+        var row_product_discount = product_discount[rowindex] * 1;
 
         if(purchase_on_percent_or_fix){
-            if(purchase_on_percent_or_fix == true)
-            net_unit_cost = row_product_cost + (row_product_cost * product_discount[rowindex] / 100);
+            if(purchase_on_percent_or_fix == true){
+                row_product_discount = row_product_cost * row_product_discount / 100;
+                net_unit_cost = row_product_cost + (row_product_cost * product_discount[rowindex] / 100);
+                $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.discount-value').val((row_product_discount * quantity).toFixed(2));
+            }
         }
 
         // var net_unit_cost = row_product_cost  + (row_product_cost * product_discount[rowindex] / 100);
@@ -636,9 +640,15 @@ function calculateTotal() {
 
     //Sum of discount
     var total_discount = 0;
-    $(".discount").each(function() {
-        total_discount += parseFloat($(this).text());
+    // $(".discount").each(function() {
+    //     total_discount += parseFloat($(this).text());
+    // });
+    // console.log(total_discount);
+    total_discount = 0;
+    $(".discount-value").each(function() {
+        total_discount += parseFloat($(this).val());
     });
+    console.log(total_discount);
     $("#total-discount").text(total_discount.toFixed(2));
     $('input[name="total_discount"]').val(total_discount.toFixed(2));
 

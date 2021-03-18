@@ -305,7 +305,7 @@ class PurchaseController extends Controller
                 $unit_name[]  = $unit->unit_name;
                 $unit_operator[] = $unit->operator;
                 $unit_operation_value[] = $unit->operation_value;
-                array_unshift($unit_percent_or_fix, $unit->percent_or_fix);
+                $unit_percent_or_fix[] = $unit->percent_or_fix;
             }
         }
         
@@ -1027,10 +1027,11 @@ class PurchaseController extends Controller
             $lims_payment_data = Payment::where('purchase_id', $id)->get();
             foreach ($lims_product_purchase_data as $product_purchase_data) {
                 $lims_purchase_unit_data = Unit::find($product_purchase_data->purchase_unit_id);
-                if ($lims_purchase_unit_data->operator == '*')
-                    $recieved_qty = $product_purchase_data->recieved * $lims_purchase_unit_data->operation_value;
-                else
-                    $recieved_qty = $product_purchase_data->recieved / $lims_purchase_unit_data->operation_value;
+                // if ($lims_purchase_unit_data->operator == '*')
+                //     $recieved_qty = $product_purchase_data->recieved * $lims_purchase_unit_data->operation_value;
+                // else
+                //     $recieved_qty = $product_purchase_data->recieved / $lims_purchase_unit_data->operation_value;
+                $recieved_qty = $product_purchase_data->recieved;
 
                 $lims_product_data = Product::find($product_purchase_data->product_id);
                 if($product_purchase_data->variant_id) {

@@ -85,7 +85,8 @@
                                                     <th id="total-qty">0</th>
                                                     <th class="recieved-product-qty d-none"></th>
                                                     <th></th>
-                                                    <th id="total-discount">0.00</th>
+                                                    <th></th>
+                                                    <!-- <th id="total-discount">0.00</th> -->
                                                     <th id="total-tax">0.00</th>
                                                     <th id="total">0.00</th>
                                                     <th><i class="dripicons-trash"></i></th>
@@ -259,6 +260,10 @@ var unit_name = [];
 var unit_operator = [];
 var unit_operation_value = [];
 
+var unit_percent_or_fix = [];
+var unit_purchase_percent = [];
+var unit_sale_percent = [];
+
 // temporary array
 var temp_unit_name = [];
 var temp_unit_operator = [];
@@ -334,6 +339,11 @@ $("table.order-list tbody").on("click", ".ibtnDel", function(event) {
     unit_name.splice(rowindex, 1);
     unit_operator.splice(rowindex, 1);
     unit_operation_value.splice(rowindex, 1);
+
+    unit_percent_or_fix.splice(rowindex, 1);
+    unit_purchase_percent.splice(rowindex, 1);
+    unit_sale_percent.splice(rowindex, 1);
+
     $(this).closest("tr").remove();
     calculateTotal();
 });
@@ -402,7 +412,7 @@ function productSearch(data) {
         data: {
             data: data
         },
-        success: function(data) {
+        success: function(data) {console.log(data);
             var flag = 1;
             $(".product-code").each(function(i) {
                 if ($(this).val() == data[1]) {
@@ -438,7 +448,7 @@ function productSearch(data) {
                 cols += '<td class="sub-total"></td>';
                 cols += '<td><button type="button" class="ibtnDel btn btn-md btn-danger">{{trans("file.delete")}}</button></td>';
                 cols += '<input type="hidden" class="product-code" name="product_code[]" value="' + data[1] + '"/>';
-                cols += '<input type="hidden" class="product-id" name="product_id[]" value="' + data[9] + '"/>';
+                cols += '<input type="hidden" class="product-id" name="product_id[]" value="' + data[10] + '"/>';
                 cols += '<input type="hidden" class="purchase-unit" name="purchase_unit[]" value="' + temp_unit_name[0] + '"/>';
                 cols += '<input type="hidden" class="net_unit_cost" name="net_unit_cost[]" />';
                 cols += '<input type="hidden" class="discount-value" name="discount[]" />';
@@ -450,13 +460,18 @@ function productSearch(data) {
                 $("table.order-list tbody").append(newRow);
 
                 product_cost.push(parseFloat(data[2]));
-                product_discount.push('0.00');
+                product_discount.push(data[12] == null ? 0.00 : data[12]);
                 tax_rate.push(parseFloat(data[3]));
                 tax_name.push(data[4]);
                 tax_method.push(data[5]);
                 unit_name.push(data[6]);
                 unit_operator.push(data[7]);
                 unit_operation_value.push(data[8]);
+
+                unit_percent_or_fix.push(data[9]);
+                unit_purchase_percent.push(data[12]);
+                unit_sale_percent.push(data[13]);
+
                 rowindex = newRow.index();
                 calculateRowProductData(1);
             }
@@ -526,12 +541,23 @@ function checkQuantity(purchase_qty, flag) {
 
 function calculateRowProductData(quantity) {
     unitConversion();
-    $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('td:nth-child(6)').text((product_discount[rowindex] * quantity).toFixed(2));
+    $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('td:nth-child(6)').text((product_discount[rowindex] * 1).toFixed(2));
     $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.discount-value').val((product_discount[rowindex] * quantity).toFixed(2));
     $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.tax-rate').val(tax_rate[rowindex].toFixed(2));
 
     if (tax_method[rowindex] == 1) {
-        var net_unit_cost = row_product_cost - product_discount[rowindex];
+
+        var purchase_on_percent_or_fix = unit_percent_or_fix[rowindex].slice(0, unit_percent_or_fix[rowindex].indexOf(","));
+        var row_product_discount = product_discount[rowindex] * 1;
+
+        if(purchase_on_percent_or_fix){
+            if(purchase_on_percent_or_fix == true){
+                row_product_discount = (row_product_cost * row_product_discount / 100);
+                $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.discount-value').val((row_product_discount * quantity).toFixed(2));
+            }
+        }
+
+        var net_unit_cost = row_product_cost + row_product_discount;
         var tax = net_unit_cost * quantity * (tax_rate[rowindex] / 100);
         var sub_total = (net_unit_cost * quantity) + tax;
 
@@ -542,7 +568,16 @@ function calculateRowProductData(quantity) {
         $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('td:nth-child(8)').text(sub_total.toFixed(2));
         $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.subtotal-value').val(sub_total.toFixed(2));
     } else {
-        var sub_total_unit = row_product_cost - product_discount[rowindex];
+        var purchase_on_percent_or_fix = unit_percent_or_fix[rowindex].slice(0, unit_percent_or_fix[rowindex].indexOf(","));
+        var row_product_discount = product_discount[rowindex] * 1;
+
+        if(purchase_on_percent_or_fix){
+            if(purchase_on_percent_or_fix == true){
+                row_product_discount = (row_product_cost * row_product_discount / 100);
+            }
+        }
+
+        var sub_total_unit = row_product_cost + row_product_discount;
         var net_unit_cost = (100 / (100 + tax_rate[rowindex])) * sub_total_unit;
         var tax = (sub_total_unit - net_unit_cost) * quantity;
         var sub_total = sub_total_unit * quantity;
@@ -588,6 +623,11 @@ function calculateTotal() {
     $(".discount").each(function() {
         total_discount += parseFloat($(this).text());
     });
+    total_discount = 0;
+    $("table.order-list tbody .discount-value").each(function() {
+        total_discount += parseFloat($(this).val());
+    });
+    
     $("#total-discount").text(total_discount.toFixed(2));
     $('input[name="total_discount"]').val(total_discount.toFixed(2));
 

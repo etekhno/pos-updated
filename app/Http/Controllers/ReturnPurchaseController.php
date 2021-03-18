@@ -140,23 +140,31 @@ class ReturnPurchaseController extends Controller
         $unit_name = array();
         $unit_operator = array();
         $unit_operation_value = array();
+        $unit_percent_or_fix = array();
         foreach ($units as $unit) {
             if ($lims_product_data->purchase_unit_id == $unit->id) {
                 array_unshift($unit_name, $unit->unit_name);
                 array_unshift($unit_operator, $unit->operator);
                 array_unshift($unit_operation_value, $unit->operation_value);
+                array_unshift($unit_percent_or_fix, $unit->percent_or_fix);
             } else {
                 $unit_name[]  = $unit->unit_name;
                 $unit_operator[] = $unit->operator;
                 $unit_operation_value[] = $unit->operation_value;
+                $unit_percent_or_fix[] = $unit->percent_or_fix;
             }
         }
         
         $product[] = implode(",", $unit_name) . ',';
         $product[] = implode(",", $unit_operator) . ',';
         $product[] = implode(",", $unit_operation_value) . ',';
+        $product[] = implode(",",$unit_percent_or_fix) . ',';
+
         $product[] = $lims_product_data->id;
         $product[] = $product_variant_id;
+        $product[] = $lims_product_data->purchase_percentage;
+        $product[] = $lims_product_data->sale_percentage;
+        
         return $product;
     }
 

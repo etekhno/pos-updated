@@ -613,10 +613,10 @@
         }
     }
 
-    function purchaseDetails(purchase){console.log(purchase);
+    function purchaseDetails(purchase){
         var htmltext = '<strong>{{trans("file.Date")}}: </strong>'+purchase[0]+'<br><strong>{{trans("file.reference")}}: </strong>'+purchase[1]+'<br><strong>{{trans("file.Purchase Status")}}: </strong>'+purchase[2]+'<br><br><div class="row"><div class="col-md-6"><strong>{{trans("file.From")}}:</strong><br>'+purchase[4]+'<br>'+purchase[5]+'<br>'+purchase[6]+'</div><div class="col-md-6"><div class="float-right"><strong>{{trans("file.To")}}:</strong><br>'+purchase[7]+'<br>'+purchase[8]+'<br>'+purchase[9]+'<br>'+purchase[10]+'<br>'+purchase[11]+'<br>'+purchase[12]+'</div></div></div>';
 
-        $.get('purchases/product_purchase/' + purchase[3], function(data){
+        $.get('purchases/product_purchase/' + purchase[3], function(data){console.log(data);
             $(".product-purchase-list tbody").remove();
             var name_code = data[0];
             var qty = data[1];
@@ -634,7 +634,7 @@
                 cols += '<td>' + qty[index] + ' ' + unit_code[index] + '</td>';
                 cols += '<td>' + (subtotal[index] / qty[index]) + '</td>';
                 cols += '<td>' + tax[index] + '(' + tax_rate[index] + '%)' + '</td>';
-                cols += '<td>' + discount[index]/10 + '</td>';
+                cols += '<td>' + discount[index] / qty[index] + '</td>';
                 cols += '<td>' + subtotal[index] + '</td>';
                 newRow.append(cols);
                 newBody.append(newRow);

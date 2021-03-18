@@ -4822,11 +4822,11 @@ function calculateRowProductData(quantity) {
         // console.log("buy: " + (row_product_price + (row_product_price * unit_purchase_percent[rowindex] / 100)));
     estimated_profit = ((row_product_price + (row_product_price * product_discount[rowindex] / 100)) - 
         (row_product_price + (row_product_price * unit_purchase_percent[rowindex] / 100))) * quantity;
-
+// console.log((row_product_price + (row_product_price * product_discount[rowindex] / 100)));
+// console.log((row_product_price + (row_product_price * unit_purchase_percent[rowindex] / 100)));
+// console.log(estimated_profit);
     $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.discount-value').val((estimated_profit).toFixed(2));
-// $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.discount-value').val((product_discount[rowindex]*1.00).toFixed(2));
     $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.tax-rate').val(tax_rate[rowindex].toFixed(2));
-
     $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.discount-value-total').val((estimated_profit*1.00).toFixed(2));
 
 
@@ -4850,7 +4850,7 @@ function calculateRowProductData(quantity) {
             sub_total += (quantity * product_discount[rowindex]);
             product_discount_total[rowindex] = quantity * product_discount[rowindex];
 
-            $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.discount-value').val((product_discount[rowindex]));
+            $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.discount-value').val((product_discount[rowindex] * quantity));
             $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.discount-value-total').val((product_discount_total[rowindex]*1.00).toFixed(2));
         }
 

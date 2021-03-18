@@ -2086,10 +2086,10 @@ class SaleController extends Controller
             }
             elseif(($lims_sale_data->sale_status == 1) && ($product_sale->sale_unit_id != 0)){
                 $lims_sale_unit_data = Unit::find($product_sale->sale_unit_id);
-                if ($lims_sale_unit_data->operator == '*')
-                    $product_sale->qty = $product_sale->qty * $lims_sale_unit_data->operation_value;
-                else
-                    $product_sale->qty = $product_sale->qty / $lims_sale_unit_data->operation_value;
+                // if ($lims_sale_unit_data->operator == '*')
+                //     $product_sale->qty = $product_sale->qty * $lims_sale_unit_data->operation_value;
+                // else
+                //     $product_sale->qty = $product_sale->qty / $lims_sale_unit_data->operation_value;
                 if($product_sale->variant_id) {
                     $lims_product_variant_data = ProductVariant::select('id', 'qty')->FindExactProduct($lims_product_data->id, $product_sale->variant_id)->first();
                     $lims_product_warehouse_data = Product_Warehouse::FindProductWithVariant($lims_product_data->id, $product_sale->variant_id, $lims_sale_data->warehouse_id)->first();
