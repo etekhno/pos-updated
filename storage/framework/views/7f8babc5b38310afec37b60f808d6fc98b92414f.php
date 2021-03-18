@@ -105,9 +105,30 @@
 
         </p>
         <?php if(strpos($url, '/pos/sales') === false): ?>
+
         <table>
             <thead>
-                <tr>
+                <tr style="border-top:solid 1px; border-bottom:solid 1px" >
+                    <th colspan="4">
+                        <table>
+                            <tr>
+                                <th style="border:none"><?php echo e(trans('file.Current Due Amount')); ?></th>
+                                <th style="text-align:right; border:none"><?php echo e(number_format((float)$lims_sale_data->grand_total)); ?></th>
+                            </tr>
+                            <tr>
+                                <th style="border:none"><?php echo e(trans('file.Previous Due Amount')); ?></th>
+                                <th style="text-align:right; border:none"><?php echo e($dues - $lims_sale_data->grand_total); ?></th>
+                            </tr>
+                            <tr style="border:none;">
+                                <th style="border:none"><?php echo e(trans('file.Total Due Amount')); ?></th>
+                                <th style="text-align:right; color:red; border:none"><?php echo e($dues); ?></th>
+                            </tr>
+                        </table>
+                    </th>
+                </tr>
+                <tr  style="border:none"><th colspan="4" style="border:none"></th></tr>
+                <tr  style="border:none"><th colspan="4" style="border:none"></th></tr>
+                <tr  style="border-top:solid 1px">
                     <th><?php echo e(trans('file.Item')); ?></th>
                     <th><?php echo e(trans('file.Rate')); ?></th>
                     <th><?php echo e(trans('file.Qty')); ?></td>
@@ -158,7 +179,8 @@
                 <?php endif; ?>
                 <?php if($lims_sale_data->shipping_cost): ?>
                 <tr>
-                    <th colspan="3"><?php echo e(trans('file.Shipping Cost')); ?></th>
+                    <!-- <th colspan="3"><?php echo e(trans('file.Shipping Cost')); ?></th> -->
+                    <th colspan="3"><?php echo e(trans('file.Loading')); ?></th>
                     <th style="text-align:right"><?php echo e(number_format((float)$lims_sale_data->shipping_cost, 2, '.', '')); ?></th>
                 </tr>
                 <?php endif; ?>
@@ -200,10 +222,10 @@
                 <!-- <tr><td class="centered" colspan="3"><?php echo e(trans('file.Thank you for shopping with us.')); ?><br><?php echo e(trans('file.Will be happy to see you again.')); ?></td></tr> -->
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 <?php if(true): ?>
-                <tr>
+                <!-- <tr>
                     <th colspan="2"><?php echo e(trans('file.Total Due Amount')); ?></th>
                     <th style="text-align:right"><?php echo e($dues); ?></th>
-                </tr>
+                </tr> -->
                 <tr><td class="centered" colspan="3"><?php echo e(trans('file.Thank you for shopping with us.')); ?><br><?php echo e(trans('file.Will be happy to see you again.')); ?></td></tr>
                 <?php endif; ?>
             </tbody>

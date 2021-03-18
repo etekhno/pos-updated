@@ -1791,7 +1791,7 @@
 
                                         <div class="col-sm-4">
 
-                                            <span class="totals-title"><?php echo e(trans('file.Shipping')); ?> <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#shipping-cost-modal"><i class="dripicons-document-edit"></i></button></span><span id="shipping-cost">0.00</span>
+                                            <span class="totals-title"><?php echo e(trans('file.Loading')); ?> <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#shipping-cost-modal"><i class="dripicons-document-edit"></i></button></span><span id="shipping-cost">0.00</span>
 
                                         </div>
 
@@ -2173,7 +2173,8 @@
 
                         <div class="modal-header">
 
-                            <h5 class="modal-title"><?php echo e(trans('file.Shipping Cost')); ?></h5>
+                            <!-- <h5 class="modal-title"><?php echo e(trans('file.Shipping Cost')); ?></h5> -->
+                            <h5 class="modal-title"><?php echo e(trans('file.Loading Cost')); ?></h5>
 
                             <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true"><i class="dripicons-cross"></i></span></button>
 

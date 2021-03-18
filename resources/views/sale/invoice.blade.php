@@ -102,9 +102,30 @@
             {{trans('file.customer')}}: {{$lims_customer_data->name}}
         </p>
         @if(strpos($url, '/pos/sales') === false)
+
         <table>
             <thead>
-                <tr>
+                <tr style="border-top:solid 1px; border-bottom:solid 1px" >
+                    <th colspan="4">
+                        <table>
+                            <tr>
+                                <th style="border:none">{{trans('file.Current Due Amount')}}</th>
+                                <th style="text-align:right; border:none">{{number_format((float)$lims_sale_data->grand_total)}}</th>
+                            </tr>
+                            <tr>
+                                <th style="border:none">{{trans('file.Previous Due Amount')}}</th>
+                                <th style="text-align:right; border:none">{{ $dues - $lims_sale_data->grand_total }}</th>
+                            </tr>
+                            <tr style="border:none;">
+                                <th style="border:none">{{trans('file.Total Due Amount')}}</th>
+                                <th style="text-align:right; color:red; border:none">{{ $dues }}</th>
+                            </tr>
+                        </table>
+                    </th>
+                </tr>
+                <tr  style="border:none"><th colspan="4" style="border:none"></th></tr>
+                <tr  style="border:none"><th colspan="4" style="border:none"></th></tr>
+                <tr  style="border-top:solid 1px">
                     <th>{{trans('file.Item')}}</th>
                     <th>{{trans('file.Rate')}}</th>
                     <th>{{trans('file.Qty')}}</td>
@@ -155,7 +176,8 @@
                 @endif
                 @if($lims_sale_data->shipping_cost)
                 <tr>
-                    <th colspan="3">{{trans('file.Shipping Cost')}}</th>
+                    <!-- <th colspan="3">{{trans('file.Shipping Cost')}}</th> -->
+                    <th colspan="3">{{trans('file.Loading Cost')}}</th>
                     <th style="text-align:right">{{number_format((float)$lims_sale_data->shipping_cost, 2, '.', '')}}</th>
                 </tr>
                 @endif
@@ -197,10 +219,10 @@
                 <!-- <tr><td class="centered" colspan="3">{{trans('file.Thank you for shopping with us.')}}<br>{{trans('file.Will be happy to see you again.')}}</td></tr> -->
                 @endforeach
                 @if(true)
-                <tr>
+                <!-- <tr>
                     <th colspan="2">{{trans('file.Total Due Amount')}}</th>
                     <th style="text-align:right">{{ $dues }}</th>
-                </tr>
+                </tr> -->
                 <tr><td class="centered" colspan="3">{{trans('file.Thank you for shopping with us.')}}<br>{{trans('file.Will be happy to see you again.')}}</td></tr>
                 @endif
             </tbody>
